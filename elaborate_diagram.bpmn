@@ -48,7 +48,7 @@
       <bpmn:outgoing>SequenceFlow_1l89ioa</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1l89ioa" sourceRef="Task_1oer44m" targetRef="IntermediateThrowEvent_016e431" />
-    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_016e431">
+    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_016e431" name="Wait for GKV to empty">
       <bpmn:incoming>SequenceFlow_1l89ioa</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_00h5kzy</bpmn:outgoing>
       <bpmn:timerEventDefinition />
@@ -62,102 +62,95 @@
       <bpmn:incoming>SequenceFlow_1nvvv2w</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1nvvv2w" sourceRef="Task_0xjprs8" targetRef="EndEvent_1ubhaz8" />
-    <bpmn:textAnnotation id="TextAnnotation_07o70rz">
-      <bpmn:text>straight to message?</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_0e6pu7r" sourceRef="IntermediateThrowEvent_1f3lpvb" targetRef="TextAnnotation_07o70rz" />
   </bpmn:process>
   <bpmn:process id="Process_0sxf794" isExecutable="false">
-    <bpmn:startEvent id="StartEvent_1qwpy8c" name="Order recived">
-      <bpmn:outgoing>SequenceFlow_0kkuiiy</bpmn:outgoing>
-    </bpmn:startEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0kkuiiy" sourceRef="StartEvent_1qwpy8c" targetRef="Task_1tao3lb" />
-    <bpmn:userTask id="Task_1tao3lb" name="Select source and the weight limit of grains to transfer">
-      <bpmn:incoming>SequenceFlow_0kkuiiy</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_09u9pvh</bpmn:outgoing>
+    <bpmn:sequenceFlow id="SequenceFlow_03ukyh2" sourceRef="Task_0yvxr5m" targetRef="IntermediateThrowEvent_1kq16c8" />
+    <bpmn:sequenceFlow id="SequenceFlow_04ra1fy" sourceRef="IntermediateThrowEvent_1kq16c8" targetRef="Task_1skvuyc" />
+    <bpmn:sequenceFlow id="SequenceFlow_17aupmk" sourceRef="Task_1skvuyc" targetRef="IntermediateThrowEvent_0zyi1ke" />
+    <bpmn:sequenceFlow id="SequenceFlow_09u9pvh" sourceRef="Task_1tao3lb" targetRef="Task_0d2jw8u" />
+    <bpmn:sequenceFlow id="SequenceFlow_1klt52v" sourceRef="Task_0d2jw8u" targetRef="Task_0yvxr5m" />
+    <bpmn:sequenceFlow id="SequenceFlow_0l04ipv" sourceRef="Task_0xikg7p" targetRef="Task_01262c7" />
+    <bpmn:sequenceFlow id="SequenceFlow_08homva" sourceRef="IntermediateThrowEvent_0zyi1ke" targetRef="IntermediateThrowEvent_0ykdaev" />
+    <bpmn:sequenceFlow id="SequenceFlow_0tqgrsr" sourceRef="IntermediateThrowEvent_0ykdaev" targetRef="Task_0xikg7p" />
+    <bpmn:sequenceFlow id="SequenceFlow_0a3xoq6" sourceRef="Task_01262c7" targetRef="Task_1pvqjah" />
+    <bpmn:sequenceFlow id="SequenceFlow_0zkbrhy" sourceRef="Task_1pvqjah" targetRef="Task_0ahq2fc" />
+    <bpmn:sequenceFlow id="SequenceFlow_0q7xg4c" sourceRef="Task_0ahq2fc" targetRef="Task_1koao2n" />
+    <bpmn:sequenceFlow id="SequenceFlow_0aist4s" sourceRef="Task_1koao2n" targetRef="IntermediateThrowEvent_1671fof" />
+    <bpmn:boundaryEvent id="IntermediateThrowEvent_1nzdc0n" attachedToRef="Task_01262c7">
+      <bpmn:timerEventDefinition />
+    </bpmn:boundaryEvent>
+    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_1671fof" name="Transfer order">
+      <bpmn:incoming>SequenceFlow_0aist4s</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_19dq90b</bpmn:outgoing>
+      <bpmn:messageEventDefinition />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:serviceTask id="Task_1koao2n" name="Transfer grains to GKV">
+      <bpmn:incoming>SequenceFlow_0q7xg4c</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0aist4s</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:subProcess id="Task_0ahq2fc" name="Air rest grains">
+      <bpmn:incoming>SequenceFlow_0zkbrhy</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0q7xg4c</bpmn:outgoing>
+    </bpmn:subProcess>
+    <bpmn:serviceTask id="Task_1pvqjah" name="Drain steep of water">
+      <bpmn:incoming>SequenceFlow_0a3xoq6</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0zkbrhy</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Task_01262c7" name="Rouse grain">
+      <bpmn:incoming>SequenceFlow_0l04ipv</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0a3xoq6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Task_0xikg7p" name="Fill steep with water">
+      <bpmn:incoming>SequenceFlow_0tqgrsr</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0l04ipv</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_0ykdaev" name="Wait for set time for steeping process to begin">
+      <bpmn:incoming>SequenceFlow_08homva</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0tqgrsr</bpmn:outgoing>
+      <bpmn:timerEventDefinition />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:userTask id="Task_0yvxr5m" name="Start required conveyors">
+      <bpmn:incoming>SequenceFlow_1klt52v</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_03ukyh2</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_1kq16c8" name="Transfer order">
-      <bpmn:incoming>SequenceFlow_03ukyh2</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_04ra1fy</bpmn:outgoing>
+    <bpmn:userTask id="Task_0d2jw8u" name="Set time for steeping process to begin">
+      <bpmn:incoming>SequenceFlow_09u9pvh</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1klt52v</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_0zyi1ke" name="weight limit reach">
+      <bpmn:incoming>SequenceFlow_17aupmk</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_08homva</bpmn:outgoing>
       <bpmn:messageEventDefinition />
     </bpmn:intermediateThrowEvent>
     <bpmn:serviceTask id="Task_1skvuyc" name="Check for weight limit">
       <bpmn:incoming>SequenceFlow_04ra1fy</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_17aupmk</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_0zyi1ke" name="weight limit reach">
-      <bpmn:incoming>SequenceFlow_17aupmk</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_08homva</bpmn:outgoing>
+    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_1kq16c8" name="Transfer order">
+      <bpmn:incoming>SequenceFlow_03ukyh2</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_04ra1fy</bpmn:outgoing>
       <bpmn:messageEventDefinition />
     </bpmn:intermediateThrowEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_03ukyh2" sourceRef="Task_0yvxr5m" targetRef="IntermediateThrowEvent_1kq16c8" />
-    <bpmn:sequenceFlow id="SequenceFlow_04ra1fy" sourceRef="IntermediateThrowEvent_1kq16c8" targetRef="Task_1skvuyc" />
-    <bpmn:sequenceFlow id="SequenceFlow_17aupmk" sourceRef="Task_1skvuyc" targetRef="IntermediateThrowEvent_0zyi1ke" />
-    <bpmn:sequenceFlow id="SequenceFlow_09u9pvh" sourceRef="Task_1tao3lb" targetRef="Task_0d2jw8u" />
-    <bpmn:userTask id="Task_0d2jw8u" name="Set time for steeping process to begin">
-      <bpmn:incoming>SequenceFlow_09u9pvh</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1klt52v</bpmn:outgoing>
+    <bpmn:userTask id="Task_1tao3lb" name="Select source and the weight limit of grains to transfer">
+      <bpmn:incoming>SequenceFlow_0kkuiiy</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_09u9pvh</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1klt52v" sourceRef="Task_0d2jw8u" targetRef="Task_0yvxr5m" />
-    <bpmn:userTask id="Task_0yvxr5m" name="Start required conveyors">
-      <bpmn:incoming>SequenceFlow_1klt52v</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_03ukyh2</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0l04ipv" sourceRef="Task_0xikg7p" targetRef="Task_01262c7" />
-    <bpmn:sequenceFlow id="SequenceFlow_08homva" sourceRef="IntermediateThrowEvent_0zyi1ke" targetRef="IntermediateThrowEvent_0ykdaev" />
-    <bpmn:sequenceFlow id="SequenceFlow_0tqgrsr" sourceRef="IntermediateThrowEvent_0ykdaev" targetRef="Task_0xikg7p" />
-    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_0ykdaev" name="Wait for set time for steeping process to begin">
-      <bpmn:incoming>SequenceFlow_08homva</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0tqgrsr</bpmn:outgoing>
-      <bpmn:timerEventDefinition />
-    </bpmn:intermediateCatchEvent>
-    <bpmn:serviceTask id="Task_0xikg7p" name="Fill steep with water">
-      <bpmn:incoming>SequenceFlow_0tqgrsr</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0l04ipv</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_01262c7" name="Rouse grain">
-      <bpmn:incoming>SequenceFlow_0l04ipv</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0a3xoq6</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0a3xoq6" sourceRef="Task_01262c7" targetRef="Task_1pvqjah" />
-    <bpmn:boundaryEvent id="IntermediateThrowEvent_1nzdc0n" attachedToRef="Task_01262c7">
-      <bpmn:timerEventDefinition />
-    </bpmn:boundaryEvent>
-    <bpmn:serviceTask id="Task_1pvqjah" name="Drain steep">
-      <bpmn:incoming>SequenceFlow_0a3xoq6</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0zkbrhy</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0zkbrhy" sourceRef="Task_1pvqjah" targetRef="Task_0ahq2fc" />
-    <bpmn:subProcess id="Task_0ahq2fc" name="Air rest">
-      <bpmn:incoming>SequenceFlow_0zkbrhy</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0q7xg4c</bpmn:outgoing>
-    </bpmn:subProcess>
-    <bpmn:sequenceFlow id="SequenceFlow_0q7xg4c" sourceRef="Task_0ahq2fc" targetRef="Task_1koao2n" />
-    <bpmn:serviceTask id="Task_1koao2n" name="Transfer grains to GKV">
-      <bpmn:incoming>SequenceFlow_0q7xg4c</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0aist4s</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0aist4s" sourceRef="Task_1koao2n" targetRef="IntermediateThrowEvent_1671fof" />
-    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_1671fof" name="Transfer order">
-      <bpmn:incoming>SequenceFlow_0aist4s</bpmn:incoming>
-      <bpmn:messageEventDefinition />
-    </bpmn:intermediateThrowEvent>
-    <bpmn:textAnnotation id="TextAnnotation_06c3v6z">
-      <bpmn:text>task?</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_1xxv6xs" sourceRef="IntermediateThrowEvent_0ykdaev" targetRef="TextAnnotation_06c3v6z" />
-    <bpmn:textAnnotation id="TextAnnotation_06ynei1">
-      <bpmn:text>gateway?</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_0t3xctu" sourceRef="Task_0xikg7p" targetRef="TextAnnotation_06ynei1" />
-    <bpmn:textAnnotation id="TextAnnotation_03je56y">
-      <bpmn:text>??</bpmn:text>
-    </bpmn:textAnnotation>
+    <bpmn:startEvent id="StartEvent_1qwpy8c" name="Order recived">
+      <bpmn:outgoing>SequenceFlow_0kkuiiy</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_19dq90b" sourceRef="IntermediateThrowEvent_1671fof" targetRef="EndEvent_0j7ryi5" />
+    <bpmn:endEvent id="EndEvent_0j7ryi5" name="order fufilled">
+      <bpmn:incoming>SequenceFlow_19dq90b</bpmn:incoming>
+    </bpmn:endEvent>
     <bpmn:association id="Association_1c9u3qk" sourceRef="IntermediateThrowEvent_1nzdc0n" targetRef="TextAnnotation_03je56y" />
+    <bpmn:association id="Association_15mug5w" sourceRef="Task_0ahq2fc" targetRef="TextAnnotation_0g0pcmy" />
     <bpmn:textAnnotation id="TextAnnotation_0g0pcmy">
       <bpmn:text>sub process?</bpmn:text>
     </bpmn:textAnnotation>
-    <bpmn:association id="Association_15mug5w" sourceRef="Task_0ahq2fc" targetRef="TextAnnotation_0g0pcmy" />
+    <bpmn:textAnnotation id="TextAnnotation_03je56y">
+      <bpmn:text>continues for user specified time</bpmn:text>
+    </bpmn:textAnnotation>
   </bpmn:process>
   <bpmn:process id="Process_0ibwmhk" isExecutable="false">
     <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_0osmrtq" name="Orde recived">
@@ -226,8 +219,13 @@
     <bpmn:sequenceFlow id="SequenceFlow_09742rg" sourceRef="Task_06445kh" targetRef="IntermediateThrowEvent_1uhw6x2" />
     <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_1uhw6x2" name="Transfer order">
       <bpmn:incoming>SequenceFlow_09742rg</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_08kq2ds</bpmn:outgoing>
       <bpmn:messageEventDefinition />
     </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_08kq2ds" sourceRef="IntermediateThrowEvent_1uhw6x2" targetRef="EndEvent_0c4ck6m" />
+    <bpmn:endEvent id="EndEvent_0c4ck6m" name="order fulfilled">
+      <bpmn:incoming>SequenceFlow_08kq2ds</bpmn:incoming>
+    </bpmn:endEvent>
     <bpmn:textAnnotation id="TextAnnotation_0on91ky">
       <bpmn:text>right representation?</bpmn:text>
     </bpmn:textAnnotation>
@@ -371,27 +369,6 @@
         <di:waypoint x="1208" y="490" />
         <di:waypoint x="1270" y="490" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_06c3v6z_di" bpmnElement="TextAnnotation_06c3v6z">
-        <dc:Bounds x="1210" y="390" width="99.99999794078421" height="29.993252876477367" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_1xxv6xs_di" bpmnElement="Association_1xxv6xs">
-        <di:waypoint x="1201" y="476" />
-        <di:waypoint x="1248" y="420" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_06ynei1_di" bpmnElement="TextAnnotation_06ynei1">
-        <dc:Bounds x="1370" y="370" width="99.99999794078421" height="29.993252876477367" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_0t3xctu_di" bpmnElement="Association_0t3xctu">
-        <di:waypoint x="1358" y="450" />
-        <di:waypoint x="1406" y="400" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_07o70rz_di" bpmnElement="TextAnnotation_07o70rz">
-        <dc:Bounds x="1020" y="100" width="99.99999794078421" height="40.48582995951417" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_0e6pu7r_di" bpmnElement="Association_0e6pu7r">
-        <di:waypoint x="1012" y="187" />
-        <di:waypoint x="1052" y="140" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0a3xoq6_di" bpmnElement="SequenceFlow_0a3xoq6">
         <di:waypoint x="1530" y="490" />
         <di:waypoint x="1590" y="490" />
@@ -400,11 +377,11 @@
         <dc:Bounds x="1512" y="512" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_03je56y_di" bpmnElement="TextAnnotation_03je56y">
-        <dc:Bounds x="1550" y="380" width="99.99999794078421" height="29.993252876477367" />
+        <dc:Bounds x="1550" y="380" width="99.99999822778292" height="53.426248548199766" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_1c9u3qk_di" bpmnElement="Association_1c9u3qk">
-        <di:waypoint x="1538" y="514" />
-        <di:waypoint x="1592" y="410" />
+        <di:waypoint x="1539" y="514" />
+        <di:waypoint x="1585" y="433" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_1xhfdd8_di" bpmnElement="Task_1pvqjah">
         <dc:Bounds x="1590" y="450" width="100" height="80" />
@@ -417,7 +394,7 @@
         <dc:Bounds x="1750" y="450" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0g0pcmy_di" bpmnElement="TextAnnotation_0g0pcmy">
-        <dc:Bounds x="1850" y="370" width="99.99999794078421" height="29.993252876477367" />
+        <dc:Bounds x="1850" y="370" width="100" height="30" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_15mug5w_di" bpmnElement="Association_15mug5w">
         <di:waypoint x="1838" y="450" />
@@ -592,6 +569,9 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="IntermediateCatchEvent_17c6dkb_di" bpmnElement="IntermediateThrowEvent_016e431">
         <dc:Bounds x="3752" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3732" y="225" width="76" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_00h5kzy_di" bpmnElement="SequenceFlow_00h5kzy">
         <di:waypoint x="3788" y="200" />
@@ -609,6 +589,26 @@
       <bpmndi:BPMNEdge id="SequenceFlow_1nvvv2w_di" bpmnElement="SequenceFlow_1nvvv2w">
         <di:waypoint x="3940" y="200" />
         <di:waypoint x="3992" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_0c4ck6m_di" bpmnElement="EndEvent_0c4ck6m">
+        <dc:Bounds x="3992" y="792" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3978" y="835" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_08kq2ds_di" bpmnElement="SequenceFlow_08kq2ds">
+        <di:waypoint x="3548" y="810" />
+        <di:waypoint x="3992" y="810" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_0j7ryi5_di" bpmnElement="EndEvent_0j7ryi5">
+        <dc:Bounds x="3992" y="472" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3980" y="515" width="61" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_19dq90b_di" bpmnElement="SequenceFlow_19dq90b">
+        <di:waypoint x="2108" y="490" />
+        <di:waypoint x="3992" y="490" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

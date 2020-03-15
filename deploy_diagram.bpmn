@@ -4,75 +4,75 @@
     <bpmn:startEvent id="StartEvent_1" name="Order recived">
       <bpmn:outgoing>SequenceFlow_0anrmrr</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0anrmrr" sourceRef="StartEvent_1" targetRef="deploy01" />
-    <bpmn:sequenceFlow id="SequenceFlow_0ag00k3" sourceRef="deploy01" targetRef="deploy02" />
-    <bpmn:sequenceFlow id="SequenceFlow_07qs0qz" sourceRef="deploy02" targetRef="ExclusiveGateway_10tkilf" />
-    <bpmn:endEvent id="EndEvent_1y9hqdq" name="order fulfilled">
+    <bpmn:sequenceFlow id="SequenceFlow_0anrmrr" sourceRef="StartEvent_1" targetRef="Deploy01" />
+    <bpmn:sequenceFlow id="SequenceFlow_0ag00k3" sourceRef="Deploy01" targetRef="Deploy_StartSteep" />
+    <bpmn:sequenceFlow id="SequenceFlow_07qs0qz" sourceRef="Deploy_StartSteep" targetRef="ExclusiveGateway_Steep" />
+    <bpmn:endEvent id="EndEvent_Success" name="order fulfilled">
       <bpmn:incoming>SequenceFlow_0df1ngx</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="deploy02" name="Steeping process" camunda:class="steepProcess">
+    <bpmn:serviceTask id="Deploy_StartSteep" name="Steeping process" camunda:class="steepProcess">
       <bpmn:incoming>SequenceFlow_0ag00k3</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_07qs0qz</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:userTask id="deploy01" name="Set up steeping process">
+    <bpmn:userTask id="Deploy01" name="Set up steeping process">
       <bpmn:incoming>SequenceFlow_0anrmrr</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ag00k3</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="deploy03" name="Set up GKV process">
+    <bpmn:userTask id="Deploy03" name="Set up GKV process">
       <bpmn:incoming>SequenceFlow_1b74ole</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_08unz6p</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1te3jx2" sourceRef="deploy04" targetRef="ExclusiveGateway_0n7y8ln" />
-    <bpmn:serviceTask id="deploy04" name="GKV process" camunda:class="gkvProcess">
+    <bpmn:sequenceFlow id="SequenceFlow_1te3jx2" sourceRef="Deploy_StartGkv" targetRef="ExclusiveGateway_Gkv" />
+    <bpmn:serviceTask id="Deploy_StartGkv" name="GKV process" camunda:class="gkvProcess">
       <bpmn:incoming>SequenceFlow_08unz6p</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1te3jx2</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="ExclusiveGateway_10tkilf" name="Has steeping completed correctly?">
+    <bpmn:exclusiveGateway id="ExclusiveGateway_Steep" name="Has steeping completed correctly?">
       <bpmn:incoming>SequenceFlow_07qs0qz</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1b74ole</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0p39kfw</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_1b74ole" name="Yes" sourceRef="ExclusiveGateway_10tkilf" targetRef="deploy03" />
-    <bpmn:sequenceFlow id="SequenceFlow_0p39kfw" name="No" sourceRef="ExclusiveGateway_10tkilf" targetRef="Task_0u6a7of" />
-    <bpmn:serviceTask id="Task_0u6a7of" name="Alert user to the incorrect process">
+    <bpmn:sequenceFlow id="SequenceFlow_1b74ole" name="Yes" sourceRef="ExclusiveGateway_Steep" targetRef="Deploy03" />
+    <bpmn:sequenceFlow id="SequenceFlow_0p39kfw" name="No" sourceRef="ExclusiveGateway_Steep" targetRef="Deploy_steepFail" />
+    <bpmn:serviceTask id="Deploy_steepFail" name="Alert user to the incorrect process">
       <bpmn:incoming>SequenceFlow_0p39kfw</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0fhabui</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="EndEvent_1xrt808" name="order fulfilled">
+    <bpmn:endEvent id="EndEvent_RedoSteep" name="order fulfilled">
       <bpmn:incoming>SequenceFlow_1etp6dl</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_08unz6p" sourceRef="deploy03" targetRef="deploy04" />
-    <bpmn:exclusiveGateway id="ExclusiveGateway_0n7y8ln" name="Has GKV process completed correctly?">
+    <bpmn:sequenceFlow id="SequenceFlow_08unz6p" sourceRef="Deploy03" targetRef="Deploy_StartGkv" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_Gkv" name="Has GKV process completed correctly?">
       <bpmn:incoming>SequenceFlow_1te3jx2</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_08xtopy</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0kmho67</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_08xtopy" name="No" sourceRef="ExclusiveGateway_0n7y8ln" targetRef="Task_1jy6qmr" />
-    <bpmn:serviceTask id="Task_1jy6qmr" name="Alert user to the incorrect process">
+    <bpmn:sequenceFlow id="SequenceFlow_08xtopy" name="No" sourceRef="ExclusiveGateway_Gkv" targetRef="Deploy_gkvFail" />
+    <bpmn:serviceTask id="Deploy_gkvFail" name="Alert user to the incorrect process">
       <bpmn:incoming>SequenceFlow_08xtopy</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_00lbqoq</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="EndEvent_0prxcg5" name="order fulfilled">
+    <bpmn:endEvent id="EndEvent_RedoGkv" name="order fulfilled">
       <bpmn:incoming>SequenceFlow_0c9k1k7</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0kmho67" sourceRef="ExclusiveGateway_0n7y8ln" targetRef="Task_0cks94j" />
-    <bpmn:sequenceFlow id="SequenceFlow_0fhabui" sourceRef="Task_0u6a7of" targetRef="Task_0j3m0jt" />
-    <bpmn:sequenceFlow id="SequenceFlow_00lbqoq" sourceRef="Task_1jy6qmr" targetRef="Task_1d3txqs" />
-    <bpmn:userTask id="Task_0j3m0jt" name="Redo steeping process">
+    <bpmn:sequenceFlow id="SequenceFlow_0kmho67" name="Yes" sourceRef="ExclusiveGateway_Gkv" targetRef="Deploy05" />
+    <bpmn:sequenceFlow id="SequenceFlow_0fhabui" sourceRef="Deploy_steepFail" targetRef="Deploy_RedoSteep" />
+    <bpmn:sequenceFlow id="SequenceFlow_00lbqoq" sourceRef="Deploy_gkvFail" targetRef="Deploy_RedoGkv" />
+    <bpmn:userTask id="Deploy_RedoSteep" name="Redo steeping process">
       <bpmn:incoming>SequenceFlow_0fhabui</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1etp6dl</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Task_1d3txqs" name="Redo GKV process">
+    <bpmn:userTask id="Deploy_RedoGkv" name="Redo GKV process">
       <bpmn:incoming>SequenceFlow_00lbqoq</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0c9k1k7</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Task_0cks94j" name="Mark down order fufilled">
+    <bpmn:userTask id="Deploy05" name="Mark down order fufilled">
       <bpmn:incoming>SequenceFlow_0kmho67</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0df1ngx</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1etp6dl" sourceRef="Task_0j3m0jt" targetRef="EndEvent_1xrt808" />
-    <bpmn:sequenceFlow id="SequenceFlow_0c9k1k7" sourceRef="Task_1d3txqs" targetRef="EndEvent_0prxcg5" />
-    <bpmn:sequenceFlow id="SequenceFlow_0df1ngx" sourceRef="Task_0cks94j" targetRef="EndEvent_1y9hqdq" />
+    <bpmn:sequenceFlow id="SequenceFlow_1etp6dl" sourceRef="Deploy_RedoSteep" targetRef="EndEvent_RedoSteep" />
+    <bpmn:sequenceFlow id="SequenceFlow_0c9k1k7" sourceRef="Deploy_RedoGkv" targetRef="EndEvent_RedoGkv" />
+    <bpmn:sequenceFlow id="SequenceFlow_0df1ngx" sourceRef="Deploy05" targetRef="EndEvent_Success" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="delpoy_diagram">
@@ -94,29 +94,29 @@
         <di:waypoint x="530" y="367" />
         <di:waypoint x="575" y="367" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="EndEvent_1y9hqdq_di" bpmnElement="EndEvent_1y9hqdq">
+      <bpmndi:BPMNShape id="EndEvent_1y9hqdq_di" bpmnElement="EndEvent_Success">
         <dc:Bounds x="1502" y="349" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1488" y="392" width="64" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_1d4wu83_di" bpmnElement="deploy02">
+      <bpmndi:BPMNShape id="ServiceTask_1d4wu83_di" bpmnElement="Deploy_StartSteep">
         <dc:Bounds x="430" y="327" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="UserTask_070re8i_di" bpmnElement="deploy01">
+      <bpmndi:BPMNShape id="UserTask_070re8i_di" bpmnElement="Deploy01">
         <dc:Bounds x="270" y="327" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="UserTask_0inxk8r_di" bpmnElement="deploy03">
+      <bpmndi:BPMNShape id="UserTask_0inxk8r_di" bpmnElement="Deploy03">
         <dc:Bounds x="690" y="327" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1te3jx2_di" bpmnElement="SequenceFlow_1te3jx2">
         <di:waypoint x="960" y="367" />
         <di:waypoint x="1015" y="367" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_1f6l5r6_di" bpmnElement="deploy04">
+      <bpmndi:BPMNShape id="ServiceTask_1f6l5r6_di" bpmnElement="Deploy_StartGkv">
         <dc:Bounds x="860" y="327" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ExclusiveGateway_10tkilf_di" bpmnElement="ExclusiveGateway_10tkilf" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="ExclusiveGateway_10tkilf_di" bpmnElement="ExclusiveGateway_Steep" isMarkerVisible="true">
         <dc:Bounds x="575" y="342" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="567" y="402" width="65" height="40" />
@@ -137,10 +137,10 @@
           <dc:Bounds x="608" y="231" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_0da4ea6_di" bpmnElement="Task_0u6a7of">
+      <bpmndi:BPMNShape id="ServiceTask_0da4ea6_di" bpmnElement="Deploy_steepFail">
         <dc:Bounds x="850" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_1xrt808_di" bpmnElement="EndEvent_1xrt808">
+      <bpmndi:BPMNShape id="EndEvent_1xrt808_di" bpmnElement="EndEvent_RedoSteep">
         <dc:Bounds x="1502" y="102" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1488" y="145" width="64" height="14" />
@@ -150,7 +150,7 @@
         <di:waypoint x="790" y="367" />
         <di:waypoint x="860" y="367" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ExclusiveGateway_0n7y8ln_di" bpmnElement="ExclusiveGateway_0n7y8ln" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="ExclusiveGateway_0n7y8ln_di" bpmnElement="ExclusiveGateway_Gkv" isMarkerVisible="true">
         <dc:Bounds x="1015" y="342" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="996" y="402" width="88" height="40" />
@@ -164,10 +164,10 @@
           <dc:Bounds x="1048" y="298" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_189xvd1_di" bpmnElement="Task_1jy6qmr">
+      <bpmndi:BPMNShape id="ServiceTask_189xvd1_di" bpmnElement="Deploy_gkvFail">
         <dc:Bounds x="1100" y="220" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_0prxcg5_di" bpmnElement="EndEvent_0prxcg5">
+      <bpmndi:BPMNShape id="EndEvent_0prxcg5_di" bpmnElement="EndEvent_RedoGkv">
         <dc:Bounds x="1502" y="242" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1488" y="285" width="64" height="14" />
@@ -176,6 +176,9 @@
       <bpmndi:BPMNEdge id="SequenceFlow_0kmho67_di" bpmnElement="SequenceFlow_0kmho67">
         <di:waypoint x="1065" y="367" />
         <di:waypoint x="1260" y="367" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1154" y="349" width="18" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0fhabui_di" bpmnElement="SequenceFlow_0fhabui">
         <di:waypoint x="950" y="120" />
@@ -185,13 +188,13 @@
         <di:waypoint x="1200" y="260" />
         <di:waypoint x="1260" y="260" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="UserTask_0tet0tq_di" bpmnElement="Task_0j3m0jt">
+      <bpmndi:BPMNShape id="UserTask_0tet0tq_di" bpmnElement="Deploy_RedoSteep">
         <dc:Bounds x="1260" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="UserTask_0yt182m_di" bpmnElement="Task_1d3txqs">
+      <bpmndi:BPMNShape id="UserTask_0yt182m_di" bpmnElement="Deploy_RedoGkv">
         <dc:Bounds x="1260" y="220" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="UserTask_0yoe77d_di" bpmnElement="Task_0cks94j">
+      <bpmndi:BPMNShape id="UserTask_0yoe77d_di" bpmnElement="Deploy05">
         <dc:Bounds x="1260" y="327" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1etp6dl_di" bpmnElement="SequenceFlow_1etp6dl">
