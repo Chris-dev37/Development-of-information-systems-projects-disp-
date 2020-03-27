@@ -2,6 +2,7 @@ package uk.ac.uwe.myBPM.deploybpm;
 
 import org.apache.ibatis.logging.LogFactory;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
 import org.camunda.bpm.engine.test.ProcessEngineRule;
 import org.camunda.bpm.extension.process_test_coverage.junit.rules.TestCoverageProcessEngineRuleBuilder;
 import org.camunda.bpm.engine.test.Deployment;
@@ -48,6 +49,17 @@ public class ProcessUnitTest {
 	  //ProcessInstance processInstance = processEngine().getRuntimeService().startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 	  
 	  // Now: Drive the process by API and assert correct behavior by camunda-bpm-assert
+  }
+  
+  @Test
+  @Deployment(resources = "process.bpmn")
+  public void testCurrentStatus() {
+	  
+	  ProcessInstanceWithVariables processInstance = (ProcessInstanceWithVariables) processEngine().getRuntimeService().startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
+	  
+	  boolean steepOK = (boolean) processInstance.getVariables().get("steepOK");
+	  System.out.println("steepOK: " +steepOK);
+	  
   }
 
 }

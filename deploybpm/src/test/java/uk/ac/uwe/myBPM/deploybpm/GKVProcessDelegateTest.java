@@ -10,11 +10,11 @@ import static org.mockito.Mockito.verify;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.junit.Test;
 
-public class SteepProcessDelegateTest{
+public class GKVProcessDelegateTest{
 
 	@Test
 	public void verifyThatTheDelegateSetsVariable() {
-		SteepProcessDelegate delegate = new SteepProcessDelegate();
+		GKVProcessDelegate delegate = new GKVProcessDelegate();
 		
 		DelegateExecution mockExecution = mock(DelegateExecution.class);
 		
@@ -24,6 +24,7 @@ public class SteepProcessDelegateTest{
 			e.printStackTrace();
 			fail("throw exception: " + e.getMessage());
 		}
-		verify(mockExecution, times(1)).setVariable(eq("steepOK"), any(Boolean.class));
+		verify(mockExecution, times(1)).setVariable(eq("gkvOK"), any(Boolean.class));
 	}
+
 }
