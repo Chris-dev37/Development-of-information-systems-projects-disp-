@@ -68,9 +68,9 @@
 
   <div id="info-box">
 	<div>Process Definition Name: deploybpm</div>
-	<div>Coverage: 33.3%</div>
+	<div>Coverage: 25.9%</div>
 	<div>Test Class: uk.ac.uwe.myBPM.deploybpm.ProcessUnitTest</div>
-	<div>TestMethod: testUserCompletion</div>
+	<div>TestMethod: testSecondGatewayFailure</div>
   </div>
   
   <!-- element to draw bpmn diagram in -->
@@ -200,13 +200,11 @@
       }          
 			canvas.addMarker('ExclusiveGateway_1he32qs', 'highlight');
 			canvas.addMarker('StartEvent_0ahbhpf', 'highlight');
-			canvas.addMarker('ServiceTask_1lwk9gl', 'highlight');
-			$("g[data-element-id='UserTask_052ln5b']").addClass('highlight-running');
+			$("g[data-element-id='UserTask_0lfgttv']").addClass('highlight-running');
 			canvas.addMarker('ServiceTask_1hghy3a', 'highlight');
 			$("g[data-element-id='SequenceFlow_0v9x55o']").find('path').attr('stroke', '#00ff00');
-			$("g[data-element-id='SequenceFlow_1prabup']").find('path').attr('stroke', '#00ff00');
+			$("g[data-element-id='SequenceFlow_1eoxi1u']").find('path').attr('stroke', '#00ff00');
 			$("g[data-element-id='SequenceFlow_1lpjsxw']").find('path').attr('stroke', '#00ff00');
-			$("g[data-element-id='SequenceFlow_1vdwcjb']").find('path').attr('stroke', '#00ff00');
           //YOUR ANNOTATIONS GO HERE
 
         });

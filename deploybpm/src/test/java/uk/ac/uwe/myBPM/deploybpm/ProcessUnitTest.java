@@ -4,6 +4,8 @@ import static org.camunda.bpm.engine.test.assertions.ProcessEngineAssertions.ass
 import static org.camunda.bpm.engine.test.assertions.ProcessEngineAssertions.init;
 import static org.camunda.bpm.engine.test.assertions.ProcessEngineAssertions.processEngine;
 
+import java.util.Random;
+
 import org.apache.ibatis.logging.LogFactory;
 import org.camunda.bpm.engine.impl.persistence.entity.TaskEntity;
 import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
@@ -57,23 +59,23 @@ public class ProcessUnitTest {
   @Deployment(resources = "process.bpmn")
   public void testFirstGateway() {
 	  
-	  ProcessInstanceWithVariables processInstanceSteep = (ProcessInstanceWithVariables) processEngine().getRuntimeService().startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
+	  ProcessInstanceWithVariables processInstance = (ProcessInstanceWithVariables) processEngine().getRuntimeService().startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 	  
-	  boolean steepOK = (boolean) processInstanceSteep.getVariables().get("steepOK");
+	  boolean steepOK = (boolean) processInstance.getVariables().get("steepOK");
 	  System.out.println("steepOK Value: " +steepOK);
 	  
-	  TaskAssert task = assertThat(processInstanceSteep).task();
+	  TaskAssert task = assertThat(processInstance).task();
 	  
 	  if(!steepOK) {
-		  assertThat(processInstanceSteep).isWaitingAt("UserTask_052ln5b");
+		  assertThat(processInstance).isWaitingAt("UserTask_052ln5b");
 		  task.hasName("Redo steeping process");
 		  task.isNotAssigned();
-		  System.out.println("Test ended at 'Redo steeping process' user task");
+		  System.out.println("testFirstGateway Test ended at 'Redo steeping process' user task");
 	  }else {
-		  assertThat(processInstanceSteep).isWaitingAt("UserTask_0ay8xd0");
+		  assertThat(processInstance).isWaitingAt("UserTask_0lfgttv");
 		  task.hasName("Set up GKV process");
 		  task.isNotAssigned();
-		  System.out.println("Test ended at 'Set up GKV process' user task");
+		  System.out.println("testFirstGateway Test ended at 'Set up GKV process' user task");
 	  }
 	  
   }
@@ -82,47 +84,37 @@ public class ProcessUnitTest {
   @Deployment(resources = "process.bpmn")
   public void testSecondGateway() {
 	  
-	  ProcessInstanceWithVariables processInstanceGkv = (ProcessInstanceWithVariables) processEngine().getRuntimeService().startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
+	  ProcessInstanceWithVariables processInstance = (ProcessInstanceWithVariables) processEngine().getRuntimeService().startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 	  
 //	  boolean gkvOK = (boolean) processInstance.getVariables().get("gkvOK");
-//	  System.out.println("gkvOK Value: " +gkvOK);
-	  boolean steepOK = (boolean) processInstanceGkv.getVariables().get("steepOK");
-	  System.out.println("steepOK: " + steepOK);
 	  
-	  boolean gkvOK = false;
-	  TaskAssert task = assertThat(processInstanceGkv).task();
+	  Random rand = new Random();
+	  boolean gkvOK = (rand.nextBoolean());  // having to use this method of setting a random boolean to gkvOK as the commented out assignment above causes a java.lang.NullPointerExeption.  
+	  System.out.println("gkvOK Value: " +gkvOK);
 	  
-	  TaskAssert taskAssert = assertThat(processInstanceGkv).task();
+	  boolean steep2ndGateTest = (boolean) processInstance.getVariables().get("steepOK");
+	  System.out.println("steep2ndGateTest Value: " +steep2ndGateTest);
+	  
+	  TaskAssert taskAssert = assertThat(processInstance).task();
 	  TaskEntity userTask = (TaskEntity)taskAssert.getActual();
-	  
-	  System.out.println(userTask);
 	 
 	  userTask.setAssignee("user");
 	  userTask.delegate("user");
 	  userTask.resolve();
-	
-	  System.out.println(processInstanceGkv.isEnded());
-	
-	  while(steepOK) {
-	  if(!gkvOK) {
-		  
-		  task = assertThat(processInstanceGkv).task();
-		  
-		  taskAssert = assertThat(processInstanceGkv).task();
-		  userTask = (TaskEntity)taskAssert.getActual();
-		  System.out.println("aaa"+userTask);
-		  
-		  assertThat(processInstanceGkv).isWaitingAt("UserTask_1j6xcn7");
-		  task.hasName("Redo GKV process");
-		  task.isNotAssigned();
-		  System.out.println("Test ended at 'Redo GKV process' user task");
+	  
+	  while(steep2ndGateTest) {
+	  if(gkvOK) {
+		  assertThat(processInstance).isWaitingAt("UserTask_0i345fe");
+		  taskAssert.hasName("Mark down order fufilled");
+		  taskAssert.isNotAssigned();
+		  System.out.println("testSecondGateway Test ended at 'Mark down order fufilled' user task");	  
 	  }else {
-		  assertThat(processInstanceGkv).isWaitingAt("UserTask_0i345fe");
-		  task.hasName("Mark down order fufilled");
-		  task.isNotAssigned();
-		  System.out.println("Test ended at 'Mark down order fufilled' user task");
-	  }
-	  } 
+		  assertThat(processInstance).isWaitingAt("UserTask_1j6xcn7");
+		  taskAssert.hasName("Redo GKV process");
+		  taskAssert.isNotAssigned();
+		  System.out.println("testSecondGateway Test ended at 'Redo GKV process' user task");
+	  	}
+	 }
   }
   @Test
   @Deployment (resources = "process.bpmn")
